@@ -8,47 +8,68 @@
 # Reveal letters if the guess is correct; indicate if incorrect.
 # Continue until the user guesses the word or runs out of attempts.
 # Display a congratulatory message when the word is guessed.
-    # "code",
-    # "deafault",
-    # "topaz",
-    # "memory",
-    # "quiz",
-    # "karate",
-    # "computer",
-    # "snake",
-    # "python",
-    # "language"
-    # random.randint(0, len(WORD_LIST))
+
 
 import random
 
-WORD_LIST = [
-    "cake"
+word_list = [
+    "cake",
+    "code",
+    "default",
+    "topaz",
+    "memory",
+    "quiz",
+    "karate",
+    "computer",
+    "snake",
+    "python",
+    "language"
 ]
 
-secret_word = WORD_LIST[0]
+secret_word = random.choice(word_list).lower()
 print(secret_word)
-MAX_GUESSES = 10
+max_guesses = 10
+guessed_letters = []
 
-print("Welcome to the game!")
-print(f"You have {MAX_GUESSES} Guesses")
-print(f"Your Word has {len(secret_word)} letters in it:")
-for i in secret_word:
-    print("_", end=" ")
+print("Welcome to the word guessing game!")
+print(f"You have {max_guesses} guesses to guess the word.")
+print(f"Your word has {len(secret_word)} letters in it:")
 print()
 
-guess = input("Enter a letter: ")
-MAX_GUESSES -= 1
-if guess in secret_word:
-    print("Letter Found!")
-else:
-    print("Letter NOT Found...")
+while max_guesses > 0:
+    running_guess = ""
+    for letter in secret_word:
+        if letter in guessed_letters:
+            running_guess += letter
+        else:
+            running_guess += "_"
+    print(f"Secret Word: {running_guess}")
+    print(
+        f"Guessed Letters: {', '.join(sorted(guessed_letters))}"
+        )
+    print(f"Guesses left: {max_guesses}")
 
-for index, letter in enumerate(secret_word):
-    if letter != guess:
-        print("_", end=" ")
-        
+    if "_" not in running_guess:
+        print("CONGRATULATIONS! YOU WIN!!!")
+        break
+
+    guess = input("Enter a letter: ").lower()
+    if not guess.isalpha() or len(guess) != 1:
+        print("Please enter a single letter.")
+        continue
+    elif guess in guessed_letters:
+        print("Letter already guessed.")
+        continue
     else:
-        print(letter, end=" ")
-        
-print(f"\nYou have {MAX_GUESSES} guesses left")
+        guessed_letters.append(guess)
+        if guess in secret_word:
+            print("Letter Found!")
+        else:
+            print("Letter NOT Found...")
+
+        max_guesses -= 1
+        if max_guesses == 0:
+            print("GAME OVER! Please try again.")
+            print(f"the secret word was {secret_word}")
+        else:
+            print(f"\nYou have {max_guesses} guesses left")
